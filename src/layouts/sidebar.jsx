@@ -12,6 +12,20 @@ import { cn } from "@/lib/utils";
 import { CircleUser, Menu, Package2 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { navItems } from "../App";
+import Footer from "@/components/Footer"; // Import Footer component
+
+const categories = [
+  { name: "General", icon: <Package2 className="h-4 w-4" /> },
+  { name: "JavaScript", icon: <Package2 className="h-4 w-4" /> },
+  { name: "React", icon: <Package2 className="h-4 w-4" /> },
+  // Add more categories as needed
+];
+
+const recentPosts = [
+  { title: "Understanding closures in JavaScript", author: "Alice" },
+  { title: "React hooks best practices", author: "Bob" },
+  // Add more recent posts as needed
+];
 
 const Layout = () => {
   return (
@@ -26,6 +40,7 @@ const Layout = () => {
         <main className="flex-grow p-4 overflow-auto">
           <Outlet />
         </main>
+        <Footer /> {/* Add Footer component */}
       </div>
     </div>
   );
@@ -42,13 +57,25 @@ const Sidebar = () => (
       </div>
       <div className="flex-1">
         <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-2">
-          {navItems.map((item) => (
-            <SidebarNavLink key={item.to} to={item.to}>
-              {item.icon}
-              {item.title}
+          {categories.map((category) => (
+            <SidebarNavLink key={category.name} to={`/${category.name.toLowerCase()}`}>
+              {category.icon}
+              {category.name}
             </SidebarNavLink>
           ))}
         </nav>
+        <div className="mt-4 px-2 lg:px-4">
+          <h2 className="text-lg font-semibold mb-2">Recent Posts</h2>
+          <ul className="space-y-2">
+            {recentPosts.map((post, index) => (
+              <li key={index} className="text-sm">
+                <NavLink to={`/post/${index}`} className="hover:underline">
+                  {post.title} - {post.author}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -71,12 +98,25 @@ const MobileSidebar = () => (
           <Package2 className="h-6 w-6" />
           <span className="sr-only">Acme Inc</span>
         </NavLink>
-        {navItems.map((item) => (
-          <SidebarNavLink key={item.to} to={item.to}>
-            {item.title}
+        {categories.map((category) => (
+          <SidebarNavLink key={category.name} to={`/${category.name.toLowerCase()}`}>
+            {category.icon}
+            {category.name}
           </SidebarNavLink>
         ))}
       </nav>
+      <div className="mt-4 px-2 lg:px-4">
+        <h2 className="text-lg font-semibold mb-2">Recent Posts</h2>
+        <ul className="space-y-2">
+          {recentPosts.map((post, index) => (
+            <li key={index} className="text-sm">
+              <NavLink to={`/post/${index}`} className="hover:underline">
+                {post.title} - {post.author}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
     </SheetContent>
   </Sheet>
 );
@@ -92,9 +132,8 @@ const UserDropdown = () => (
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
+      <DropdownMenuItem>Profile</DropdownMenuItem>
       <DropdownMenuItem>Settings</DropdownMenuItem>
-      <DropdownMenuItem>Support</DropdownMenuItem>
-      <DropdownMenuSeparator />
       <DropdownMenuItem>Logout</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
